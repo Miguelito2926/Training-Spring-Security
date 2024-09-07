@@ -10,7 +10,7 @@ public class PublicEndpoints {
 
     public List<String> getEndpoints() {
         return Arrays.asList(
-               // "/users/**",
+                "/users/**",
                 "/auth/login"
                 // Adicione mais endpoints aqui
         );

@@ -1,6 +1,6 @@
 package com.ednaldo.springsecurity6.service;
 
-import com.ednaldo.springsecurity6.dto.UserRequest;
+import com.ednaldo.springsecurity6.dto.CreateUserProfileRequest;
 import com.ednaldo.springsecurity6.entities.Role;
 import com.ednaldo.springsecurity6.entities.User;
 import com.ednaldo.springsecurity6.repositories.RoleRepository;
@@ -8,12 +8,11 @@ import com.ednaldo.springsecurity6.repositories.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-import lombok.extern.slf4j.Slf4j;
 
 import javax.management.relation.RoleNotFoundException;
+import java.util.List;
 import java.util.Set;
 
-import static org.hibernate.query.sqm.tree.SqmNode.log;
 @RequiredArgsConstructor
 @Service
 public class UserService {
@@ -22,7 +21,7 @@ public class UserService {
     private final RoleRepository roleRepository;
     private final PasswordEncoder passwordEncoder;
 
-    public User createUser(UserRequest request) throws RoleNotFoundException {
+    public User createUser(CreateUserProfileRequest request) throws RoleNotFoundException {
         // Validação de dados
         if (request.getUsername() == null || request.getUsername().isEmpty()) {
             throw new IllegalArgumentException("Username cannot be null or empty");
@@ -47,5 +46,9 @@ public class UserService {
         User savedUser = userRepository.save(user);
 
         return savedUser;
+    }
+
+    public List<User> findAll() {
+        return userRepository.findAll();
     }
 }

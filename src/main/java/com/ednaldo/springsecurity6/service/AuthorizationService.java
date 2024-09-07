@@ -2,6 +2,7 @@ package com.ednaldo.springsecurity6.service;
 
 import com.ednaldo.springsecurity6.dto.LoginRequest;
 import com.ednaldo.springsecurity6.dto.LoginResponse;
+import com.ednaldo.springsecurity6.entities.Role;
 import com.ednaldo.springsecurity6.repositories.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
@@ -13,6 +14,7 @@ import org.springframework.security.oauth2.jwt.JwtEncoderParameters;
 import org.springframework.stereotype.Service;
 
 import java.time.Instant;
+import java.util.stream.Collectors;
 
 @RequiredArgsConstructor
 @Service
@@ -31,13 +33,18 @@ public class AuthorizationService {
             throw new BadCredentialsException("user or password is invalid");
         }
 
+        var scopes = user.get().getRoles()
+                .stream()
+                .map(Role::getName)
+                .collect(Collectors.joining(" "));
+
         // Construção das claims do JWT
         var claims = JwtClaimsSet.builder()
                 .issuer("mybackend")
                 .subject(user.get().getUserId().toString())
                 .issuedAt(Instant.now())
                 .expiresAt(Instant.now().plusSeconds(jwtExpires))
-                .claim("username", user.get().getUsername())  // Adiciona o username nas claims, se necessário
+                .claim("scope", scopes)  // Adiciona o username nas claims, se necessário
                 .build();
 
         // Geração do token JWT
