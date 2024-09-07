@@ -31,6 +31,8 @@ public class Tweet {
     @JoinColumn(name = "user_id")
     private User user;
 
+    private String content;
+
     @CreationTimestamp
     private Instant creationTimestamp;
 
