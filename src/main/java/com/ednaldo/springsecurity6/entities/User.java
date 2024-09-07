@@ -1,5 +1,6 @@
 package com.ednaldo.springsecurity6.entities;
 
+import com.ednaldo.springsecurity6.dto.LoginRequest;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -14,6 +15,7 @@ import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.springframework.security.crypto.password.PasswordEncoder;
 
 import java.util.Set;
 import java.util.UUID;
@@ -42,4 +44,7 @@ public class User {
     )
     private Set<Role> roles;
 
+    public boolean isLoginCorrect(LoginRequest request, PasswordEncoder passwordEncoder) {
+       return passwordEncoder.matches(request.password(), this.password);
+    }
 }
